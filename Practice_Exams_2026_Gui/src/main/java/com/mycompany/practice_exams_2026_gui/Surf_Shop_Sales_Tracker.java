@@ -4,11 +4,13 @@
  */
 package com.mycompany.practice_exams_2026_gui;
 
-/**
- *
- * @author reaganrichards
- */
+import java.io.FileWriter;
+import java.io.IOException;
+import javax.swing.JOptionPane;
+
 public class Surf_Shop_Sales_Tracker extends javax.swing.JFrame {
+    
+    private final SurfSales ProductSales = new SurfSales();
     
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(Surf_Shop_Sales_Tracker.class.getName());
 
@@ -44,8 +46,10 @@ public class Surf_Shop_Sales_Tracker extends javax.swing.JFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
         jButton1_LoadSalesData.setText("Load Sales Data");
+        jButton1_LoadSalesData.addActionListener(this::jButton1_LoadSalesDataActionPerformed);
 
         jButton2_SaveSalesData.setText("Save Sales Data");
+        jButton2_SaveSalesData.addActionListener(this::jButton2_SaveSalesDataActionPerformed);
 
         jTextArea1.setEditable(false);
         jTextArea1.setColumns(20);
@@ -65,12 +69,14 @@ public class Surf_Shop_Sales_Tracker extends javax.swing.JFrame {
         jMenu2_Tools.setText("Tools");
 
         jMenuItem1_LoadSalesData.setText("Load Sales Data");
+        jMenuItem1_LoadSalesData.addActionListener(this::jMenuItem1_LoadSalesDataActionPerformed);
         jMenu2_Tools.add(jMenuItem1_LoadSalesData);
 
         jMenuItem1_SaveSalesData.setText("Save Sales Data");
         jMenu2_Tools.add(jMenuItem1_SaveSalesData);
 
         jMenuItem1_Clear.setText("Clear");
+        jMenuItem1_Clear.addActionListener(this::jMenuItem1_ClearActionPerformed);
         jMenu2_Tools.add(jMenuItem1_Clear);
 
         jMenuBar1.add(jMenu2_Tools);
@@ -114,9 +120,73 @@ public class Surf_Shop_Sales_Tracker extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jMenuItem1_ExitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1_ExitActionPerformed
-        // TODO add your handling code here:
+       Exit();
     }//GEN-LAST:event_jMenuItem1_ExitActionPerformed
 
+    private void jButton1_LoadSalesDataActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1_LoadSalesDataActionPerformed
+        LoadSalesData();
+    }//GEN-LAST:event_jButton1_LoadSalesDataActionPerformed
+
+    private void jMenuItem1_LoadSalesDataActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1_LoadSalesDataActionPerformed
+        LoadSalesData();
+    }//GEN-LAST:event_jMenuItem1_LoadSalesDataActionPerformed
+
+    private void jButton2_SaveSalesDataActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2_SaveSalesDataActionPerformed
+       SaveSalesData();
+    }//GEN-LAST:event_jButton2_SaveSalesDataActionPerformed
+
+    private void jMenuItem1_ClearActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1_ClearActionPerformed
+        ClearData();
+    }//GEN-LAST:event_jMenuItem1_ClearActionPerformed
+    
+    private void Exit()
+    {
+        System.exit(0);
+    }
+    
+    private void LoadSalesData()
+    {
+        int total = ProductSales.GetTotalSales();
+        double average = ProductSales.GetAverageSales();
+        int over = ProductSales.GetSalesOverTarget();
+        int under = ProductSales.GetSalesUnderTarget();
+        int years = ProductSales.GetYearsProcessed();
+        
+        String report = ""; 
+        report += "Total Sales: " + total + "\n";
+        report += "Average Sales: " + average + "\n";
+        report += "Sales over target: " + over + "\n";
+        report += "Sales under target: " + under + "\n";
+        
+        jTextArea1.setText(report);
+        jLabel1_YearsProcessed.setText("Years Processed: " + years);
+    }
+        
+      private void SaveSalesData()
+      {
+          try (FileWriter writer = new FileWriter("data.text"))
+              
+          {
+              writer.write("DATA LOG \n");
+              writer.write("***************************\n");
+              writer.write(jTextArea1.getText());
+              writer.write("***************************\n");
+              JOptionPane.showMessageDialog(this, "Data Saved Successfully! ");
+          }catch(IOException e)
+          {
+              JOptionPane.showMessageDialog(this, "Error Saving File" + e.getMessage());
+          }
+          
+      }
+                private void ClearData()
+          {
+              jTextArea1.setText("");
+              jLabel1_YearsProcessed.setText("");
+          }
+        
+        
+    
+    
     /**
      * @param args the command line arguments
      */
